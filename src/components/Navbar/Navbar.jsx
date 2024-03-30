@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { NavLink } from "react-router-dom";
-import { IoIosLogIn } from "react-icons/io";
+import {  NavLink } from "react-router-dom";
+import Profile from "./Profile";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(true);
+ 
 
   const navLinks = (
     <>
@@ -76,9 +77,7 @@ const Navbar = () => {
             </div>
             <div>
               <div className="hidden md:block font-bold px-3 py-2 rounded-md">
-                <button className="flex items-center gap-2 hover:text-[#ef6f18]">
-                  <IoIosLogIn className="text-2xl"></IoIosLogIn> Login
-                </button>
+                <Profile />
               </div>
             </div>
           </div>
@@ -93,6 +92,9 @@ const Navbar = () => {
         <div className="px-8">
           <div className="flex flex-col  gap-8 font-bold tracking-wider list-none">
             {navLinks}
+          </div>
+          <div className="mt-6">
+            <Profile />
           </div>
         </div>
       </div>
