@@ -4,6 +4,7 @@ import TaskCreation from "../../Pages/TaskCreation/TaskCreation";
 import TaskListing from "../../Pages/TaskListing/TaskListing";
 import Login from "../../Pages/Login/Login";
 import Register from "../../Pages/Register/Register";
+import PrivetRoute from "../PrivetRoute/PrivetRoute";
 
 const Root = createBrowserRouter([
     {
@@ -17,7 +18,7 @@ const Root = createBrowserRouter([
             },
             {
                 path: "Task-creation",
-                element: <TaskCreation/>
+                element: <PrivetRoute><TaskCreation/></PrivetRoute>
             },
             {
                 path: "login",

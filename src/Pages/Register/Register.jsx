@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Register = () => {
-    const [isShow, setIsShow] = useState(false);
-    const {createUser, updateName} = useAuth()
+  const [isShow, setIsShow] = useState(false);
+  const { createUser, updateName } = useAuth();
+    const [isError, setError] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
 
   // register form use React hook from
   const {
@@ -15,14 +19,26 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-
   // Submit handle function
   const onSubmit = async (data) => {
-      try {
-          await createUser(data.email, data.password)
-          await updateName(data.name)
-      } catch (err) {
-          console.log(err.massage);
+    try {
+      setError("");
+      await createUser(data.email, data.password);
+        await updateName(data.name);
+        navigate(location?.state ? location?.state : "/")
+      toast.success("User Create successfully", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      console.log(err.massage);
+      setError(err.message);
     }
   };
 
@@ -42,7 +58,8 @@ const Register = () => {
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="text"
                 {...register("name", { required: true })}
-                placeholder="Your name" required
+                placeholder="Your name"
+                required
                 id="name"
                 name="name"
                 autoComplete="name"
@@ -57,7 +74,8 @@ const Register = () => {
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="email"
                 {...register("email", { required: true })}
-                placeholder="Your email" required
+                placeholder="Your email"
+                required
                 id="email"
                 name="email"
                 autoComplete="email"
@@ -75,7 +93,8 @@ const Register = () => {
               </div>
               <input
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-                id="password" required
+                id="password"
+                required
                 name="password"
                 autoComplete="email"
                 type={isShow ? "text" : "password"}
@@ -113,6 +132,7 @@ const Register = () => {
                   <BsEyeSlashFill className="text-xl" />
                 )}
               </div>
+              {isError && <p className="text-red-600 mt-4">{isError}</p>}
             </div>
             <div className="mt-8">
               <button
