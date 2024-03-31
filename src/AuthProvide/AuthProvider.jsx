@@ -8,13 +8,15 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.config";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loader, setLoader] = useState(true);
+  const axios = useAxiosPublic();
 
-  console.log(user);
+  // console.log(user);
 
   // create Users
   const createUser = (email, password) => {
@@ -46,11 +48,26 @@ const AuthProvider = ({ children }) => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoader(false);
+      if (currentUser) {
+        const userInfo = { email: currentUser.email }
+        // TODO : save LocalStorage
+        axios.post("/jwt", userInfo)
+          .then(res => {
+            if (res.data.token) {
+              localStorage.setItem('access-token', res.data.token);
+          }
+        })
+      }
+      else {
+        localStorage.removeItem("access-token");
+        // do something 
+        // TODO : Remove token for localStorage
+      }
     });
     return () => {
       unSub();
     };
-  }, []);
+  }, [axios]);
 
   const authInfo = {
     user,

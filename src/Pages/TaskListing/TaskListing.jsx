@@ -16,14 +16,14 @@ const TaskListing = () => {
 
   if (isLoading) return <LoadingCompo />;
 
-  console.log(taskLists);
+  // console.log(taskLists);
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 mt-4">
       <h1 className="text-center font-bold text-2xl mt-6">
         Task Listing {taskLists.length}
       </h1>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {taskLists?.map((task) => (
           <TaskListingCard key={task.id} task={task}></TaskListingCard>
         ))}
