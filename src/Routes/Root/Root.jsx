@@ -6,12 +6,13 @@ import Login from "../../Pages/Login/Login";
 import Register from "../../Pages/Register/Register";
 import PrivetRoute from "../PrivetRoute/PrivetRoute";
 import TaskUpdate from "../../components/TaskUpdate/TaskUpdate";
+import ErrorPage from "../../components/ErrorPage/ErrorPage";
 
 const Root = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement: <h1>Error Page</h1>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
