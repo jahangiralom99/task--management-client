@@ -25,7 +25,6 @@ const TaskListing = () => {
 
   // total page
   const tolaPage = Math.ceil(taskLists?.total / limit);
-  // console.log(tolaPage);
 
   // handle Previous Btn
   const handlePreviousBtn = () => {
@@ -41,7 +40,6 @@ const TaskListing = () => {
     }
   };
 
-  // console.log(page);
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 mt-4">

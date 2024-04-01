@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 const Register = () => {
   const [isShow, setIsShow] = useState(false);
   const { createUser, updateName } = useAuth();
-    const [isError, setError] = useState("");
-    const navigate = useNavigate();
-    const location = useLocation();
+  const [isError, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // register form use React hook from
   const {
@@ -24,9 +24,9 @@ const Register = () => {
     try {
       setError("");
       await createUser(data.email, data.password);
-        await updateName(data.name);
-        navigate(location?.state ? location?.state : "/")
-      toast.success("User Create successfully", {
+      await updateName(data.name);
+      navigate(location?.state ? location?.state : "/");
+      toast.success("User Register successfully", {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -37,7 +37,6 @@ const Register = () => {
         theme: "colored",
       });
     } catch (err) {
-      console.log(err.massage);
       setError(err.message);
     }
   };

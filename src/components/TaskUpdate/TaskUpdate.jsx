@@ -11,9 +11,9 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=957628e55aa3b5dfac
 
 const TaskUpdate = () => {
   const { id } = useParams();
-    const axios = useAxiosPrivet();
-    const axios2 = useAxiosPublic()
-    const navigate = useNavigate();
+  const axios = useAxiosPrivet();
+  const axios2 = useAxiosPublic();
+  const navigate = useNavigate();
 
   // import form react hook form
   const {
@@ -50,31 +50,28 @@ const TaskUpdate = () => {
         price: data.price,
         postTime: new Date(),
         // arrays: [...data.arrays],
-        };
-        const response = await axios.patch(`/task-update/${_id}`, updateInfo);
-        // console.log(response.data.modifiedCount > 0);
-        if (response.data.modifiedCount > 0) {
-            navigate("/")
-            toast.success("Task Update in successfully", {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-              });
-        }
+      };
+      const response = await axios.patch(`/task-update/${_id}`, updateInfo);
+      if (response.data.modifiedCount > 0) {
+        navigate("/");
+        toast.success("Task Update in successfully", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
-
-//   console.log(data);
 
   return (
     <section className="p-3 pb-8 max-w-screen-xl mx-auto px-4 mt-8">
       <h1 className="text-center font-bold text-2xl mt-3 border-l-4 border-[#ef6f18]">
-        Task Creation
+        Task Update
       </h1>
       <div>
         {/* Start Forms Task  */}
@@ -179,7 +176,7 @@ const TaskUpdate = () => {
               type="submit"
               className="rounded-md font-bold py-2 px-4 w-full border hover:border-red-500 hover:text-red-500"
             >
-              Task Created
+              Task Update
             </button>
           </div>
         </form>

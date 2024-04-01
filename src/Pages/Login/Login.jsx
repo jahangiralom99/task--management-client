@@ -35,7 +35,6 @@ const Login = () => {
         theme: "colored",
       });
     } catch (err) {
-      //   console.log(err.message);
       setError(err.message);
     }
   };

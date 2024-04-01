@@ -16,7 +16,6 @@ const AuthProvider = ({ children }) => {
   const [loader, setLoader] = useState(true);
   const axios = useAxiosPublic();
 
-  // console.log(user);
 
   // create Users
   const createUser = (email, password) => {
