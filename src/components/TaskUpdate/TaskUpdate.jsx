@@ -1,63 +1,75 @@
+import { useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import useAxiosPrivet from "../../Hooks/useAxiosPrivet";
+import LoadingCompo from "../Common/LoadingCompo";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
-import useAxiosPrivet from "../../Hooks/useAxiosPrivet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-// // get api from Imgbb
+// get api from Imgbb
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=957628e55aa3b5dfacc5f5a22107ba39`;
 
-const TaskCreation = () => {
-  const axios = useAxiosPublic();
-  const privetAxios = useAxiosPrivet();
-  const navigate = useNavigate();
-  // import form react hook form 
+const TaskUpdate = () => {
+  const { id } = useParams();
+    const axios = useAxiosPrivet();
+    const axios2 = useAxiosPublic()
+    const navigate = useNavigate();
+
+  // import form react hook form
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors },
   } = useForm();
 
-  // React Hook forms
-  const onSubmit = async(data) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["single-task", id],
+    queryFn: async () => {
+      const res = await axios.get(`/task-list/${id}`);
+      return res.data;
+    },
+  });
+  if (isLoading) return <LoadingCompo />;
+
+  const { name, arrays = [], title, description, price, _id } = data || {};
+
+  // Handle form
+  const onSubmit = async (data) => {
     const imageFile = { image: data.photo[0] };
-    const res = await axios.post(image_hosting_api, imageFile, {
+    const res = await axios2.post(image_hosting_api, imageFile, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if (res.data.success) {
       const url = res.data?.data?.display_url;
-      const taskInfo = {
+      const updateInfo = {
         name: data.name,
         image: url,
         title: data.title,
         description: data.description,
         price: data.price,
         postTime: new Date(),
-        arrays : ["HTML",
-        "Figma",
-        "WordPress",
-        "Coral Draw"]
-      }
-      const response = await privetAxios.post("/task-create", taskInfo);
-      if (response.data.acknowledged) {
-        reset();
-        navigate("/")
-        toast.success("Task Create in successfully", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
+        // arrays: [...data.arrays],
+        };
+        const response = await axios.patch(`/task-update/${_id}`, updateInfo);
+        // console.log(response.data.modifiedCount > 0);
+        if (response.data.modifiedCount > 0) {
+            navigate("/")
+            toast.success("Task Update in successfully", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+        }
     }
-
-   
   };
+
+//   console.log(data);
 
   return (
     <section className="p-3 pb-8 max-w-screen-xl mx-auto px-4 mt-8">
@@ -73,6 +85,7 @@ const TaskCreation = () => {
               <input
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="text"
+                defaultValue={name}
                 {...register("name", { required: true })}
                 placeholder="name"
                 id="name"
@@ -103,6 +116,7 @@ const TaskCreation = () => {
               <input
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="text"
+                defaultValue={description}
                 {...register("description", { required: true })}
                 placeholder="description"
                 id="description"
@@ -117,6 +131,7 @@ const TaskCreation = () => {
               <input
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="text"
+                defaultValue={title}
                 {...register("title", { required: true })}
                 placeholder="Title"
                 id="title"
@@ -129,12 +144,11 @@ const TaskCreation = () => {
           </div>
           <div className="flex items-center justify-center gap-12 p-2">
             <div className="mt-4 flex-[50%]">
-              <label className="block text-sm font-bold mb-2">
-                Price
-              </label>
+              <label className="block text-sm font-bold mb-2">Price</label>
               <input
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="number"
+                defaultValue={price}
                 {...register("price", { required: true })}
                 placeholder="Price"
                 id="price"
@@ -145,17 +159,18 @@ const TaskCreation = () => {
               )}
             </div>
             <div className="mt-4 flex-[50%]">
-              <label className="block text-sm font-bold mb-2">Color</label>
+              <label className="block text-sm font-bold mb-2">Arrays</label>
               <input
-                className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                className="bg-gray-200  text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                 type="text"
-                {...register("color", { required: true })}
+                defaultValue={arrays}
+                {...register("arrays", { required: true })}
                 placeholder="Color"
                 id="color"
                 autoComplete="text"
               />
               {errors.color && (
-                <p className="text-red-600">Color is Required</p>
+                <p className="text-red-600">Arrays is Required</p>
               )}
             </div>
           </div>
@@ -173,4 +188,4 @@ const TaskCreation = () => {
   );
 };
 
-export default TaskCreation;
+export default TaskUpdate;
