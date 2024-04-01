@@ -109,9 +109,3 @@ const TaskListing = () => {
 };
 
 export default TaskListing;
-
-{
-  /* <button className="w-10 h-10 border font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-[#f3782b]">
-1 */
-}
-// </button>

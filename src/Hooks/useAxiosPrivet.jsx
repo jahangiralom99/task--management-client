@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: "https://task-server-umber.vercel.app/api/v1",
 });
 const useAxiosPrivet = () => {
   const navigation = useNavigate();
